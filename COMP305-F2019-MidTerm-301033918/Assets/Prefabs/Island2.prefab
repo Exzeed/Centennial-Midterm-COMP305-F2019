@@ -97,10 +97,10 @@ MonoBehaviour:
   verticalSpeed: 0
   horizontalSpeed: 0.04
   boundary:
-    Top: 2.71
-    Right: 2.88
-    Bottom: -2.71
-    Left: -2.88
+    Top: 2.75
+    Right: 4.5
+    Bottom: -2.7
+    Left: -3.6
 --- !u!58 &6785862660740012075
 CircleCollider2D:
   m_ObjectHideFlags: 0

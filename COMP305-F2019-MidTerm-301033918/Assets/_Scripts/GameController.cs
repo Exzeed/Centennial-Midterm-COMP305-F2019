@@ -73,7 +73,11 @@ public class GameController : MonoBehaviour
         {
             _score = value;
 
-            
+            if (_score == 500)
+            {
+                DontDestroyOnLoad(scoreboard);
+                SceneManager.LoadScene("Level2");
+            }
 
             if (scoreboard.GetComponent<Scoreboard>().highScore < _score)
             {
@@ -114,6 +118,7 @@ public class GameController : MonoBehaviour
                 restartButton.SetActive(false);
                 activeSoundClip = SoundClip.NONE;
                 break;
+
             case "Main":
                 highScoreLabel.enabled = false;
                 startLabel.SetActive(false);
@@ -122,6 +127,7 @@ public class GameController : MonoBehaviour
                 restartButton.SetActive(false);
                 activeSoundClip = SoundClip.ENGINE;
                 break;
+
             case "Level2":
                 highScoreLabel.enabled = false;
                 startLabel.SetActive(false);
@@ -133,8 +139,8 @@ public class GameController : MonoBehaviour
                 //_lives = scoreboard.GetComponent<Scoreboard>().life;
                 scoreLabel.text = "Score: " + scoreboard.GetComponent<Scoreboard>().score;
                 //_score = scoreboard.GetComponent<Scoreboard>().score;
-
                 break;
+
             case "End":
                 scoreLabel.enabled = false;
                 livesLabel.enabled = false;
@@ -173,19 +179,7 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        LevelTransition();
-    }
 
-    public void LevelTransition()
-    {
-        if (_score == 500)
-        {
-            DontDestroyOnLoad(scoreboard);
-            DontDestroyOnLoad(scoreboard);
-            scoreboard.GetComponent<Scoreboard>().score = _score;
-            scoreboard.GetComponent<Scoreboard>().life = _lives;
-            SceneManager.LoadScene("Level2");
-        }
     }
 
     // Event Handlers
