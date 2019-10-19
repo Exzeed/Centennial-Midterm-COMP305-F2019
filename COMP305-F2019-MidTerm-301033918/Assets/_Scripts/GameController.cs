@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+/// <summary>
+/// Source File: GameController.cs
+/// Last Modified by: Geerthan Kanthasamy
+/// This program handles updating the UI, maintaining the audio and spawning the game objects
+/// </summary>
 public class GameController : MonoBehaviour
 {
     [Header("Scene Game Objects")]
@@ -27,7 +31,7 @@ public class GameController : MonoBehaviour
     public Text scoreLabel;
     public Text highScoreLabel;
 
-    public GameObject highScore;
+    public GameObject scoreboard;
 
     [Header("UI Control")]
     public GameObject startLabel;
@@ -48,7 +52,6 @@ public class GameController : MonoBehaviour
             _lives = value;
             if(_lives < 1)
             {
-                
                 SceneManager.LoadScene("End");
             }
             else
@@ -72,9 +75,9 @@ public class GameController : MonoBehaviour
 
             
 
-            if (highScore.GetComponent<HighScore>().score < _score)
+            if (scoreboard.GetComponent<Scoreboard>().highScore < _score)
             {
-                highScore.GetComponent<HighScore>().score = _score;
+                scoreboard.GetComponent<Scoreboard>().highScore = _score;
             }
             scoreLabel.text = "Score: " + _score.ToString();
         }
@@ -89,7 +92,7 @@ public class GameController : MonoBehaviour
 
     private void GameObjectInitialization()
     {
-        highScore = GameObject.Find("HighScore");
+        scoreboard = GameObject.Find("Scoreboard");
 
         startLabel = GameObject.Find("StartLabel");
         endLabel = GameObject.Find("EndLabel");
@@ -119,19 +122,31 @@ public class GameController : MonoBehaviour
                 restartButton.SetActive(false);
                 activeSoundClip = SoundClip.ENGINE;
                 break;
+            case "Level2":
+                highScoreLabel.enabled = false;
+                startLabel.SetActive(false);
+                startButton.SetActive(false);
+                endLabel.SetActive(false);
+                restartButton.SetActive(false);
+                activeSoundClip = SoundClip.ENGINE;
+                livesLabel.text = "Lives: " + scoreboard.GetComponent<Scoreboard>().life;
+                //_lives = scoreboard.GetComponent<Scoreboard>().life;
+                scoreLabel.text = "Score: " + scoreboard.GetComponent<Scoreboard>().score;
+                //_score = scoreboard.GetComponent<Scoreboard>().score;
+
+                break;
             case "End":
                 scoreLabel.enabled = false;
                 livesLabel.enabled = false;
                 startLabel.SetActive(false);
                 startButton.SetActive(false);
                 activeSoundClip = SoundClip.NONE;
-                highScoreLabel.text = "High Score: " + highScore.GetComponent<HighScore>().score;
+                highScoreLabel.text = "High Score: " + scoreboard.GetComponent<Scoreboard>().highScore;
                 break;
         }
 
-        Lives = 5;
-        Score = 0;
-
+            Lives = 5;
+            Score = 0;
 
         if ((activeSoundClip != SoundClip.NONE) && (activeSoundClip != SoundClip.NUM_OF_CLIPS))
         {
@@ -158,13 +173,25 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        LevelTransition();
+    }
+
+    public void LevelTransition()
+    {
+        if (_score == 500)
+        {
+            DontDestroyOnLoad(scoreboard);
+            DontDestroyOnLoad(scoreboard);
+            scoreboard.GetComponent<Scoreboard>().score = _score;
+            scoreboard.GetComponent<Scoreboard>().life = _lives;
+            SceneManager.LoadScene("Level2");
+        }
     }
 
     // Event Handlers
     public void OnStartButtonClick()
     {
-        DontDestroyOnLoad(highScore);
+        DontDestroyOnLoad(scoreboard);
         SceneManager.LoadScene("Main");
     }
 

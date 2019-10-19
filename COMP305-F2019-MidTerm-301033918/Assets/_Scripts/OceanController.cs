@@ -1,17 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Source File: OceanController.cs
+/// Last Modified by: Geerthan Kanthasamy
+/// This program moves the Ocean GameObjects (background) and resets it's position when it reaches it's specified boundary
+/// </summary>
 public class OceanController : MonoBehaviour
 {
     public float verticalSpeed = 0.1f;
-    public float resetPosition = 4.8f;
-    public float resetPoint = -4.8f;
+    public float horizontalSpeed = 0.1f;
+    public float resetPositionY = 4.8f;
+    public float resetPositionX = 4.8f;
+    public float resetPointY = -4.8f;
+    public float resetPointX = -4.8f;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        //Reset();
+
     }
 
     // Update is called once per frame
@@ -26,7 +34,7 @@ public class OceanController : MonoBehaviour
     /// </summary>
     void Move()
     {
-        Vector2 newPosition = new Vector2(0.0f, verticalSpeed);
+        Vector2 newPosition = new Vector2(horizontalSpeed, verticalSpeed);
         Vector2 currentPosition = transform.position;
 
         currentPosition -= newPosition;
@@ -38,7 +46,7 @@ public class OceanController : MonoBehaviour
     /// </summary>
     void Reset()
     {
-        transform.position = new Vector2(0.0f, resetPosition);
+        transform.position = new Vector2(resetPositionX, resetPositionY);
     }
 
     /// <summary>
@@ -47,7 +55,12 @@ public class OceanController : MonoBehaviour
     /// </summary>
     void CheckBounds()
     {
-        if(transform.position.y <= resetPoint)
+        if(verticalSpeed > 0 && transform.position.y <= resetPointY)
+        {
+            Reset();
+        }
+
+        else if(horizontalSpeed > 0 && transform.position.x <= resetPointX)
         {
             Reset();
         }

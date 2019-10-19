@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Util;
-
+/// <summary>
+/// Source File: CloudController.cs
+/// Last Modified by: Geerthan Kanthasamy
+/// This program moves the Cloud GameObject and resets it's position when it reaches it's specified boundary
+/// </summary>
 public class CloudController : MonoBehaviour
 {
     [Header("Speed Values")]
@@ -51,8 +55,17 @@ public class CloudController : MonoBehaviour
         horizontalSpeed = Random.Range(horizontalSpeedRange.min, horizontalSpeedRange.max);
         verticalSpeed = Random.Range(verticalSpeedRange.min, verticalSpeedRange.max);
 
-        float randomXPosition = Random.Range(boundary.Left, boundary.Right);
-        transform.position = new Vector2(randomXPosition, Random.Range(boundary.Top, boundary.Top + 2.0f));
+        if(verticalSpeed > 0)
+        {
+            float randomXPosition = Random.Range(boundary.Left, boundary.Right);
+            transform.position = new Vector2(randomXPosition, Random.Range(boundary.Top, boundary.Top + 2.0f));
+        }
+
+        else if(horizontalSpeed > 0)
+        {
+            float randomYPosition = Random.Range(boundary.Bottom, boundary.Top);
+            transform.position = new Vector2(Random.Range(boundary.Right, boundary.Right + 2.0f), randomYPosition);
+        }
     }
 
     /// <summary>
@@ -61,7 +74,12 @@ public class CloudController : MonoBehaviour
     /// </summary>
     void CheckBounds()
     {
-        if (transform.position.y <= boundary.Bottom)
+        if (verticalSpeed > 0 && transform.position.y <= boundary.Bottom)
+        {
+            Reset();
+        }
+
+        else if (horizontalSpeed > 0 && transform.position.x <= boundary.Left)
         {
             Reset();
         }

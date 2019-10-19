@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Util;
-
+/// <summary>
+/// Source File: PlayerController.cs
+/// Last Modified by: Geerthan Kanthasamy
+/// This program allows the player to control the Player GameObject's movements (within the limits set by the Boundary method)
+/// It also sets the logic for any collisions that occur with Island or Cloud game objects (such as updating UI and playing sound effects)
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
     public Speed speed;
@@ -32,14 +37,28 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 newPosition = transform.position;
 
+        //move right
         if(Input.GetAxis("Horizontal") > 0.0f)
         {
             newPosition += new Vector2(speed.max, 0.0f);
         }
 
+        //move left
         if (Input.GetAxis("Horizontal") < 0.0f)
         {
             newPosition += new Vector2(speed.min, 0.0f);
+        }
+
+        //move down
+        if (Input.GetAxis("Vertical") < 0.0f)
+        {
+            newPosition += new Vector2(0.0f, speed.min);
+        }
+
+        //move up
+        if (Input.GetAxis("Vertical") > 0.0f)
+        {
+            newPosition += new Vector2(0.0f, speed.max);
         }
 
         transform.position = newPosition;
@@ -57,6 +76,18 @@ public class PlayerController : MonoBehaviour
         if (transform.position.x < boundary.Left)
         {
             transform.position = new Vector2(boundary.Left, transform.position.y);
+        }
+
+        //check bottom boundary
+        if (transform.position.y < boundary.Bottom)
+        {
+            transform.position = new Vector2(transform.position.x, boundary.Bottom);
+        }
+
+        //check top boundary
+        if (transform.position.y > boundary.Top)
+        {
+            transform.position = new Vector2(transform.position.x, boundary.Top);
         }
     }
 

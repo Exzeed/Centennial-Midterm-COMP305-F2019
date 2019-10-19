@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Util;
-
+/// <summary>
+/// Source File: IslandController.cs
+/// Last Modified by: Geerthan Kanthasamy
+/// This program moves the Island GameObject and resets it's position when it reaches it's specified boundary
+/// </summary>
 public class IslandController : MonoBehaviour
 {
     public float verticalSpeed = 0.05f;
-
+    public float horizontalSpeed = 0.05f;
 
     public Boundary boundary;
 
@@ -28,7 +32,7 @@ public class IslandController : MonoBehaviour
     /// </summary>
     void Move()
     {
-        Vector2 newPosition = new Vector2(0.0f, verticalSpeed);
+        Vector2 newPosition = new Vector2(horizontalSpeed, verticalSpeed);
         Vector2 currentPosition = transform.position;
 
         currentPosition -= newPosition;
@@ -40,8 +44,17 @@ public class IslandController : MonoBehaviour
     /// </summary>
     void Reset()
     {
-        float randomXPosition = Random.Range(boundary.Left, boundary.Right);
-        transform.position = new Vector2(randomXPosition, boundary.Top);
+        if (verticalSpeed > 0)
+        {
+            float randomXPosition = Random.Range(boundary.Left, boundary.Right);
+            transform.position = new Vector2(randomXPosition, boundary.Top);
+        }
+
+        if(horizontalSpeed > 0)
+        {
+            float randomYPosition = Random.Range(boundary.Bottom, boundary.Top);
+            transform.position = new Vector2(Random.Range(boundary.Right, boundary.Right + 2.0f), randomYPosition);
+        }
     }
 
     /// <summary>
@@ -50,7 +63,12 @@ public class IslandController : MonoBehaviour
     /// </summary>
     void CheckBounds()
     {
-        if (transform.position.y <= boundary.Bottom)
+        if (verticalSpeed > 0 && transform.position.y <= boundary.Bottom)
+        {
+            Reset();
+        }
+
+        else if (horizontalSpeed > 0 && transform.position.x <= boundary.Left)
         {
             Reset();
         }
